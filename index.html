@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en" data-framework="angularjs" ng-app="mainapp">
+<head>
+    <meta charset="utf-8">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>NooreHidayet - Islamic Ebooks</title>
+
+    <!-- add styles -->
+    <!-- Bootstrap Core CSS -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/font-awesome.min.css">
+    <!-- Custom CSS -->
+    <link href="css/extra-css.css" rel="stylesheet">
+    <!--<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">-->
+
+</head>
+<body ng-controller="BookCtrl as ctrl">
+
+<!-- Navigation -->
+<nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <div class="container">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse"
+                    data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="#">Islamic Ebooks</a>
+        </div>
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav">
+                <li>
+                    <a href="contact.html">Contact</a>
+                </li>
+            </ul>
+            <div class="col-sm-3 col-md-3 navbar-right">
+                <form class="navbar-form" role="search">
+                    <div class="input-group">
+                        <input type="text" class="form-control" placeholder="Search Ebooks" name="search"
+                               ng-model="searchVal">
+                        <div class="input-group-btn">
+                            <button class="btn btn-default" type="submit" ng-click="ctrl.search(searchVal)"><i
+                                    class="glyphicon glyphicon-search"></i></button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+
+<!-- Page Content -->
+<div class="container">
+    <div class="row">
+        <div class="col-xs-6">
+            <h3 class="text-center">Filter by Language
+            </h3>
+            <div class="well" style="max-height: 200px;overflow: auto;">
+                <div class="checkbox" id="langfilter" align="center">
+                    <label style="font-size: 1.5em" ng-repeat="category in ctrl.getCategories()">
+                        <input type="checkbox" ng-model="ctrl.filter[category]"/>
+                        <span class="cr"><i class="cr-icon fa fa-check"></i></span>
+                        <b>{{ category}} </b>
+                    </label>
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-6">
+            <h3 class="text-center">Filter by Book Type
+            </h3>
+            <div class="well" style="max-height: 300px;overflow: auto;">
+                <div class="checkbox" id="typefilter" align="center">
+                    <label style="font-size: 1.5em" ng-repeat="booktype in ctrl.getBooktypes()">
+                        <input type="checkbox" ng-model="ctrl.filter[booktype]"/>
+                        <span class="cr"><i class="cr-icon fa fa-check"></i></span>
+                        <b>{{ booktype}} </b>
+                    </label>
+                </div>
+            </div>
+        </div>
+    </div>
+    <b>Number of books: {{ filteredBooks.length }}</b>
+
+    <!-- Page Header -->
+    <div class="row">
+        <div class="col-lg-12">
+            <h1 class="page-header">NooreHidayet Foundation
+                <small>Islamic library</small>
+            </h1>
+        </div>
+    </div>
+    <!-- /.row -->
+
+    <!-- Projects Row -->
+    <div class="row">
+        <div class="col-md-4 portfolio-item"
+             ng-repeat="book in (ctrl.books | filter:ctrl.filterByCategory) as filteredBooks">
+            <a ng-init="downloadPath = ctrl.host+'/api/ebooks/downloads?ebook_id='+book._id+'&download'"/>
+            <img class="img-responsive"  ng-src="{{downloadPath}}=cover"/>
+            <!--<img  ng-src="{{downloadPath}}=cover" height="400" width="700"/>-->
+            <h3>
+                <a href="#">{{ book.title }}</a>
+            </h3>
+            <h6>Tags:<span ng-repeat="tag in book.tag">{{ tag }}  </span></h6>
+            <p>{{book.description}}</p>
+        </div>
+    </div>
+    <!-- /.row -->
+    <hr>
+    <button ng-class="{hide:ctrl.bookOnResponse < ctrl.limitPerPage}" class="btn btn-success btn-lg btn-block"
+            type="submit"
+            ng-click="ctrl.loadMore()">Show more ebooks
+    </button>
+    <button ng-class="{hide:ctrl.limitPerPage==10 || ctrl.bookOnResponse > ctrl.limitPerPage ,show:ctrl.bookOnResponse < ctrl.limitPerPage}"
+            class="btn btn-warning btn-lg btn-block disabled">
+        No more ebooks available
+    </button>
+    <!-- Footer -->
+    <footer>
+        <div class="row">
+            <div class="col-lg-12">
+                <p>Copyright &copy; Your Website 2014</p>
+            </div>
+        </div>
+        <!-- /.row -->
+    </footer>
+
+</div>
+<!-- /.container -->
+
+<!-- jQuery -->
+<script src="js/jquery.min.js"></script>
+<!-- Bootstrap Core JavaScript -->
+<script src="js/bootstrap.min.js"></script>
+<!-- add javascripts -->
+<script src="js/angular.min.js"></script>
+<script src="js/modules/app.js"></script>
+
+</body>
+</html>
